@@ -1,0 +1,22 @@
+{
+    "name": "bugada/rpg-bank",
+    "description": "A Telegram Bot that mimic a bank",
+    "keywords": ["telegram", "telegram bot", "rpg", "role play game", "bank", "account", "balance"],
+    "homepage": "https://github.com/irazasyed/telegram-bot-sdk",
+    "license": "GNU General Public License v3.0",
+    "authors": [{
+        "name": "Andrea Bugada",
+        "email": "andrea.bugada@gmail.com",
+        "homepage": "https://github.com/bugada"
+    }],
+    "require": {
+        "php": "^7.2",
+        "irazasyed/telegram-bot-sdk": "2.0",
+        "monolog/monolog": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RPGBank\\": "src/"
+        }
+    }
+}
