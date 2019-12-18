@@ -1,10 +1,10 @@
 # RPGBank
-A Telegram Bot developed using PHP/MySql that mimic basic bank features for role play games and more.
+A Telegram Bot developed using PHP/MySql that mimics basic bank features for role play games and more.
 
 It can only be used in Telegram groups.
 
 Any group member can open an account and then see his balance.
-The group admin can change the balance of group members.
+The group admins can change the balance of group members.
 
 This bot stores basic data to do his job: groupid, userid and username
 
