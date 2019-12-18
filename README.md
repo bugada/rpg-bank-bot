@@ -1,4 +1,4 @@
-<meta name="google-site-verification" content="skBFw0eaW5zxPTXi25S2F9s8lz-_EcuzyzKUNGXWBzE" />
+<meta name="google-site-verification" content="skBFw0eaW5zxPTXi25S2F9s8lz-_EcuzyzKUNGXWBzE"></meta>
 # RPGBank
 A Telegram Bot developed using PHP/MySql that mimic basic bank features for role play games and more.
 
