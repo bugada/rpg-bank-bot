@@ -6,5 +6,6 @@ CREATE TABLE `accounts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`groupId`,`userId`,`username`) USING BTREE;
+  ADD PRIMARY KEY (`groupId`,`userId`) USING BTREE,
+  ADD UNIQUE KEY `USERNAME` (`groupId`,`userId`,`username`);
 COMMIT;

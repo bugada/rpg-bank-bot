@@ -4,6 +4,8 @@ namespace RPGBank\Commands;
 
 use RPGBank\Log;
 use RPGBank\Storage\AccountService;
+use RPGBank\Exceptions\AccountNotFoundException;
+use RPGBank\Exceptions\InvalidUsernameException;
 
 class BalanceCommand extends \Telegram\Bot\Commands\Command {
 
@@ -19,10 +21,22 @@ class BalanceCommand extends \Telegram\Bot\Commands\Command {
 
 		$message = $this->getUpdate()->getMessage();
 
-		if (!AccountService::existingAccount($message)) {
+		try {
+			AccountService::existingAccount($message);
+		} catch (AccountNotFoundException $e) {
 			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
 					  'we cannot find your account. Please open a new account with: '. PHP_EOL .
 					  '/openaccount';
+			$this->replyWithMessage(compact('text'));
+			return;
+		} catch (InvalidUsernameException $e) {
+			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
+					  'your account is not associated with your current username.'. PHP_EOL .
+					  'Please use the /migrateaccount to fix this.';
+			$this->replyWithMessage(compact('text'));
+			return;
+		} catch (\Exception $e) {
+			$text = 'A generic error has occurred.';
 			$this->replyWithMessage(compact('text'));
 			return;
 		}

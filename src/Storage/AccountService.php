@@ -3,6 +3,8 @@
 namespace RPGBank\Storage;
 
 use RPGBank\Log;
+use RPGBank\Exceptions\AccountNotFoundException;
+use RPGBank\Exceptions\InvalidUsernameException;
 
 class AccountService {
 
@@ -59,22 +61,21 @@ class AccountService {
 
 	}
 
-	public static function existingAccount($message) {
+	public static function migrateAccount($message) {
 
 		$db = Db::getInstance()->getConnection();
 
 		$sth = $db->prepare('
-			select count(*) 
-			from accounts 
-			where groupId = ? 
-			and userId = ? 
-			and username = ?'
-		); 
+			update accounts 
+			set username = ?
+			where groupId = ?
+			and userId = ?'
+		);
 
 		$ok = $sth->execute([
-				$message->getChat()->getId(), 
-				$message->getFrom()->getId(), 
-				$message->getFrom()->getUsername()
+			$message->getFrom()->getUsername(),
+			$message->getChat()->getId(),
+			$message->getFrom()->getId()
 		]);
 
 		if (!$ok) {
@@ -83,13 +84,41 @@ class AccountService {
 			return;
 		}
 
-		$count = $sth->fetchColumn();
-		Log::debug("existingAccount::Count: " . $count);
+		$db = null;
+	}
+
+	public static function existingAccount($message) {
+
+		$db = Db::getInstance()->getConnection();
+
+		$sth = $db->prepare('
+			select username
+			from accounts 
+			where groupId = ? 
+			and userId = ?'
+		); 
+
+		$ok = $sth->execute([
+			$message->getChat()->getId(), 
+			$message->getFrom()->getId()
+		]);
+
+		if (!$ok) {
+			Log::error('Error on executing query');
+			throw new InvalidSqlException();
+		}
+
+		$username = $sth->fetchColumn();
+		Log::debug("existingAccount::Username: " . $username);
+
+		if (!$username) {
+			throw new AccountNotFoundException();
+		} else if ($username != $message->getFrom()->getUsername()) {
+			throw new InvalidUsernameException();
+		}
 
 		$db = null;
 
-		return $count > 0;
-		
 	}
 
 	public static function getAccountByUsername($message, $username) {
