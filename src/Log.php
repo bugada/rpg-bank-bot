@@ -2,6 +2,7 @@
 
 namespace RPGBank;
 
+use RPGBank\Conf;
 use Monolog\Logger;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Processor\IntrospectionProcessor;
@@ -20,16 +21,16 @@ class Log {
 	}
 
 	protected static function configureInstance() {
-		$dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'logs';
+		$dir = dirname(__DIR__) . DIRECTORY_SEPARATOR . Conf::LOG_DIR_NAME;
 
 		if (!file_exists($dir)){
-			mkdir($dir, 0777, true);
+			mkdir($dir, 0755, true);
 		}
 
 		$logger = new Logger('RPGBank');
 		$logger->pushProcessor(new IntrospectionProcessor());
 		$logger->pushProcessor(new WebProcessor());
-		$logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . 'rpgbank.log', 5));
+		$logger->pushHandler(new RotatingFileHandler($dir . DIRECTORY_SEPARATOR . Conf::LOG_FILE_NAME, Conf::LOG_MAX_FILES, Conf::LOG_LEVEL));
 
 		self::$instance = $logger;
 	}
