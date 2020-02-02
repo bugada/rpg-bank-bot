@@ -12,6 +12,7 @@ try {
 
 	// Adding available commands
 	$telegram->addCommands([
+		RPGBank\Commands\StartCommand::class,
 		RPGBank\Commands\HelpCommand::class,
 		RPGBank\Commands\ChangeBalanceCommand::class,
 		RPGBank\Commands\BalanceCommand::class,
