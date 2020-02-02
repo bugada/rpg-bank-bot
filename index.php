@@ -27,17 +27,19 @@ try {
 
 	$message = $update->getMessage();
 
-	// Check that is a group or supergroup
-	$chatType = $message->getChat()->getType();
-	Log::debug('Chat type: ' . $chatType);
-	if ($chatType != 'group' && $chatType != 'supergroup') {
-		// Throw handled error, this bot can only be used in groups or supergroups
-		$response = $telegram->sendMessage([
-			'chat_id' => $message->getChat()->getId(), 
-			'text' => 'this bot can only be used in groups or supergroups'
-		]);
-		Log::debug('Response: ' . $response);
-		return;
+	if ($message->getText() != "/start" && $message->getText() != "/help") {
+		// Check that is a group or supergroup
+		$chatType = $message->getChat()->getType();
+		Log::debug('Chat type: ' . $chatType);
+		if ($chatType != 'group' && $chatType != 'supergroup') {
+			// Throw handled error, this bot can only be used in groups or supergroups
+			$response = $telegram->sendMessage([
+				'chat_id' => $message->getChat()->getId(), 
+				'text' => 'this bot can only be used in groups or supergroups'
+			]);
+			Log::debug('Response: ' . $response);
+			return;
+		}
 	}
 
 	Log::debug('Processing command...');
