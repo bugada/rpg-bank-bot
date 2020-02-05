@@ -8,7 +8,7 @@ The group admins can change the balance of group members.
 
 This bot stores basic data to do his job: groupid, userid and username
 
-You can see a demo at [@RPGBank](https://t.me/RPGBankBot) in Telegram.
+You can see a demo at [@RPGBank](https://t.me/RPGBankBot) in Telegram, add it to a public or private group.
 
 ## Commands available
 
@@ -17,7 +17,7 @@ You can see a demo at [@RPGBank](https://t.me/RPGBankBot) in Telegram.
 * `/balance` - show the user account balance
 * `/openaccount` - open a new account
 * `/closeaccount` - close the account
-* `/migrateaccount` - migrate an exisiting account (not implemented yet)
+* `/migrateaccount` - migrate an exisiting account for users that changed their username.
 
 ## How to install
 

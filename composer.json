@@ -2,7 +2,7 @@
     "name": "bugada/rpg-bank",
     "description": "A Telegram Bot that mimic a bank",
     "keywords": ["telegram", "telegram bot", "rpg", "role play game", "bank", "account", "balance"],
-    "homepage": "https://github.com/bugada/rpg-bank",
+    "homepage": "https://github.com/bugada/rpg-bank-bot",
     "license": "GNU General Public License v3.0",
     "authors": [{
         "name": "Andrea Bugada",
