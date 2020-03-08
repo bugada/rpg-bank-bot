@@ -56,7 +56,7 @@ class Api extends \Telegram\Bot\Api {
 
 			Log::debug('IsForAdmin: ' . ($command->isForAdmin() ? 'true' : 'false'));
 			if ($command->isForAdmin()) {
-				if (!USerService::isUserAdmin($this, $message)) {
+				if (!UserService::isAdmin($this, $message)) {
 					$this->sendMessage([
 						'chat_id' => $message->getChat()->getId(), 
 						'text' => 'this command can be invoked by admin only'

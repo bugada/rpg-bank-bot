@@ -6,7 +6,7 @@ use RPGBank\Log;
 
 class UserService {
 
-	public static function isUserAdmin($telegramApi, $message) {
+	public static function isAdmin($telegramApi, $message) {
 		$status = $telegramApi->getChatMember([
 			'chat_id' => $message->getChat()->getId(), 
 			'user_id' => $message->getFrom()->getId()
