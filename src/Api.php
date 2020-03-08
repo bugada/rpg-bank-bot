@@ -6,6 +6,8 @@ use RPGBank\Log;
 use Telegram\Bot\Objects\User;
 use Telegram\Bot\Objects\Update;
 use RPGBank\Commands\CommandBus;
+use RPGBank\Services\UserService;
+use RPGBank\Services\MessageService;
 use RPGBank\Exceptions\InvalidCommandException;
 
 class Api extends \Telegram\Bot\Api {
@@ -43,7 +45,7 @@ class Api extends \Telegram\Bot\Api {
 
 			// process only /start and /help if not from (super)group
 			if ($message->getText() != "/start" && $message->getText() != "/help") {
-				if (!$this->isMessageFromGroup($message)) {
+				if (!MessageService::isFromGroup($message)) {
 					$response = $this->sendMessage([
 						'chat_id' => $message->getChat()->getId(), 
 						'text' => 'this bot can only be used in groups or supergroups'
@@ -54,7 +56,7 @@ class Api extends \Telegram\Bot\Api {
 
 			Log::debug('IsForAdmin: ' . ($command->isForAdmin() ? 'true' : 'false'));
 			if ($command->isForAdmin()) {
-				if (!$this->isUserAdmin($message)) {
+				if (!USerService::isUserAdmin($this, $message)) {
 					$this->sendMessage([
 						'chat_id' => $message->getChat()->getId(), 
 						'text' => 'this command can be invoked by admin only'
@@ -66,21 +68,4 @@ class Api extends \Telegram\Bot\Api {
 			$this->getCommandBus()->handler($message->getText(), $update);
 		}
 	}
-
-	private function isMessageFromGroup($message) {
-		$chatType = $message->getChat()->getType();
-		Log::debug('Chat type: ' . $chatType);
-		return ($chatType == 'group' || $chatType == 'supergroup');
-	}
-
-	private function isUserAdmin($message) {
-		$status = $this->getChatMember([
-			'chat_id' => $message->getChat()->getId(), 
-			'user_id' => $message->getFrom()->getId()
-		])->get('status');
-
-		Log::debug('ChatMemberStatus: ' . $status);
-		return ($status == 'creator' || $status == 'administrator');
-	}
-
 }

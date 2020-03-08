@@ -3,7 +3,7 @@
 namespace RPGBank\Commands;
 
 use RPGBank\Log;
-use RPGBank\Storage\AccountService;
+use RPGBank\Services\AccountService;
 
 class ChangeBalanceCommand extends \Telegram\Bot\Commands\Command {
 

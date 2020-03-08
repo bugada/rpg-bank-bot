@@ -1,8 +1,9 @@
 <?php
 
-namespace RPGBank\Storage;
+namespace RPGBank\Services;
 
 use RPGBank\Log;
+use RPGBank\Storage\Db;
 use RPGBank\Exceptions\AccountNotFoundException;
 use RPGBank\Exceptions\InvalidUsernameException;
 
