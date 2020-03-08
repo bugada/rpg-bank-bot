@@ -23,7 +23,7 @@ class Api extends \Telegram\Bot\Api {
 
 	public function getCommandBus() {
 		if (is_null($this->commandBus)) {
-				return $this->commandBus = new CommandBus($this);
+			return $this->commandBus = new CommandBus($this);
 		}
 
 		return $this->commandBus;
@@ -34,28 +34,51 @@ class Api extends \Telegram\Bot\Api {
 
 		if ($message !== null && $message->has('text')) {
 
-			// Get member status
-			//TODO: use PHPCache and getChatAdministrators(chat_id) for better performances
-			$status = $this->getChatMember([
-				'chat_id' => $message->getChat()->getId(), 
-				'user_id' => $message->getFrom()->getId()
-			])->get('status');
+			// check if it is valid command
+			$command = $this->getCommandBus()->getCommand($message->getText());
+			if ($command) {
 
-			Log::debug('ChatMemberStatus: ' . $status);
+				// process only /start and /help if not from (super)group
+				if ($message->getText() != "/start" && $message->getText() != "/help") {
+					if (!$this->isMessageFromGroup($message)) {
+						$response = $this->sendMessage([
+							'chat_id' => $message->getChat()->getId(), 
+							'text' => 'this bot can only be used in groups or supergroups'
+						]);
+						return;
+					}
+				}
 
-			$isForAdmin = $this->getCommandBus()->getCommand($message->getText())->isForAdmin();
-			Log::debug('IsForAdmin: ' . ($isForAdmin ? 'true' : 'false'));
+				Log::debug('IsForAdmin: ' . ($command->isForAdmin() ? 'true' : 'false'));
+				if ($command->isForAdmin()) {
+					if (!$this->isUserAdmin($message)) {
+						$this->sendMessage([
+							'chat_id' => $message->getChat()->getId(), 
+							'text' => 'this command can be invoked by admin only'
+						]);
+						return;
+					}
+				}
 
-			if ($isForAdmin && $status != 'creator' && $status != 'administrator') {
-				$this->sendMessage([
-					'chat_id' => $message->getChat()->getId(), 
-					'text' => 'this command can be invoked by admin only'
-				]);
-				return;
+				$this->getCommandBus()->handler($message->getText(), $update);
 			}
-
-			$this->getCommandBus()->handler($message->getText(), $update);
 		}
+	}
+
+	private function isMessageFromGroup($message) {
+		$chatType = $message->getChat()->getType();
+		Log::debug('Chat type: ' . $chatType);
+		return ($chatType == 'group' || $chatType == 'supergroup');
+	}
+
+	private function isUserAdmin($message) {
+		$status = $this->getChatMember([
+			'chat_id' => $message->getChat()->getId(), 
+			'user_id' => $message->getFrom()->getId()
+		])->get('status');
+		
+		Log::debug('ChatMemberStatus: ' . $status);
+		return ($status == 'creator' || $status == 'administrator');
 	}
 
 }

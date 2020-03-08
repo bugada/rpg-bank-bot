@@ -23,28 +23,13 @@ try {
 
 	// Waiting for incoming updates
 	$update = $telegram->getWebhookUpdates();
-	Log::debug('Incoming message: ' . $update);
-
 	$message = $update->getMessage();
 
-	if ($message->getText() != "/start" && $message->getText() != "/help") {
-		// Check that is a group or supergroup
-		$chatType = $message->getChat()->getType();
-		Log::debug('Chat type: ' . $chatType);
-		if ($chatType != 'group' && $chatType != 'supergroup') {
-			// Throw handled error, this bot can only be used in groups or supergroups
-			$response = $telegram->sendMessage([
-				'chat_id' => $message->getChat()->getId(), 
-				'text' => 'this bot can only be used in groups or supergroups'
-			]);
-			Log::debug('Response: ' . $response);
-			return;
-		}
+	if ($message && $message->getText()[0] == '/') {
+		Log::debug('Incoming message: ' . $update);
+		$response = $telegram->commandsHandler(true);
+		Log::debug('Command processed:' . $response);
 	}
-
-	Log::debug('Processing command...');
-	$update = $telegram->commandsHandler(true);
-	Log::debug('Command processed:' . $update);
 
 } catch (Error $e) {
 	Log::error('Error: ' . $e);
