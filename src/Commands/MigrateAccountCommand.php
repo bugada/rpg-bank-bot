@@ -34,10 +34,6 @@ class MigrateAccountCommand extends \Telegram\Bot\Commands\Command {
 					  'your account has been succesfully migrated to your current username.';
 			$this->replyWithMessage(compact('text'));
 			return;
-		} catch (\Exception $e) {
-			$text = 'A generic error has occurred.';
-			$this->replyWithMessage(compact('text'));
-			return;
 		}
 
 		$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 

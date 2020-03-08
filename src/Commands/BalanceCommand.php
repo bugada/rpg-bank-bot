@@ -35,10 +35,6 @@ class BalanceCommand extends \Telegram\Bot\Commands\Command {
 					  'Please use the /migrateaccount to fix this.';
 			$this->replyWithMessage(compact('text'));
 			return;
-		} catch (\Exception $e) {
-			$text = 'A generic error has occurred.';
-			$this->replyWithMessage(compact('text'));
-			return;
 		}
 
 		$balance = AccountService::getBalance(

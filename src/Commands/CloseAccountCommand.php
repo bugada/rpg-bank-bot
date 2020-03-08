@@ -35,12 +35,8 @@ class CloseAccountCommand extends \Telegram\Bot\Commands\Command {
 					  'Please use the /migrateaccount to fix this.';
 			$this->replyWithMessage(compact('text'));
 			return;
-		} catch (\Exception $e) {
-			$text = 'A generic error has occurred.';
-			$this->replyWithMessage(compact('text'));
-			return;
 		}
-
+		
 		if ($arguments != $message->getFrom()->getUsername()) {
 			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL .
 					  'closing your account will delete all your data. No refund is possible.' . PHP_EOL . 
