@@ -31,7 +31,7 @@ try {
 		Log::debug('Command processed:' . $response);
 	}
 
-} catch (Error $e) {
-	Log::error('Error: ' . $e);
+} catch (Exception | Error $e) {
+	Log::error($e);
 }
 ?>

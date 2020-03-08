@@ -6,6 +6,7 @@ use RPGBank\Log;
 use Telegram\Bot\Objects\User;
 use Telegram\Bot\Objects\Update;
 use RPGBank\Commands\CommandBus;
+use RPGBank\Exceptions\InvalidCommandException;
 
 class Api extends \Telegram\Bot\Api {
 
@@ -36,32 +37,33 @@ class Api extends \Telegram\Bot\Api {
 
 			// check if it is valid command
 			$command = $this->getCommandBus()->getCommand($message->getText());
-			if ($command) {
-
-				// process only /start and /help if not from (super)group
-				if ($message->getText() != "/start" && $message->getText() != "/help") {
-					if (!$this->isMessageFromGroup($message)) {
-						$response = $this->sendMessage([
-							'chat_id' => $message->getChat()->getId(), 
-							'text' => 'this bot can only be used in groups or supergroups'
-						]);
-						return;
-					}
-				}
-
-				Log::debug('IsForAdmin: ' . ($command->isForAdmin() ? 'true' : 'false'));
-				if ($command->isForAdmin()) {
-					if (!$this->isUserAdmin($message)) {
-						$this->sendMessage([
-							'chat_id' => $message->getChat()->getId(), 
-							'text' => 'this command can be invoked by admin only'
-						]);
-						return;
-					}
-				}
-
-				$this->getCommandBus()->handler($message->getText(), $update);
+			if (is_null($command)) {
+				throw new InvalidCommandException($message->getText());
 			}
+
+			// process only /start and /help if not from (super)group
+			if ($message->getText() != "/start" && $message->getText() != "/help") {
+				if (!$this->isMessageFromGroup($message)) {
+					$response = $this->sendMessage([
+						'chat_id' => $message->getChat()->getId(), 
+						'text' => 'this bot can only be used in groups or supergroups'
+					]);
+					return;
+				}
+			}
+
+			Log::debug('IsForAdmin: ' . ($command->isForAdmin() ? 'true' : 'false'));
+			if ($command->isForAdmin()) {
+				if (!$this->isUserAdmin($message)) {
+					$this->sendMessage([
+						'chat_id' => $message->getChat()->getId(), 
+						'text' => 'this command can be invoked by admin only'
+					]);
+					return;
+				}
+			}
+
+			$this->getCommandBus()->handler($message->getText(), $update);
 		}
 	}
 
@@ -76,7 +78,7 @@ class Api extends \Telegram\Bot\Api {
 			'chat_id' => $message->getChat()->getId(), 
 			'user_id' => $message->getFrom()->getId()
 		])->get('status');
-		
+
 		Log::debug('ChatMemberStatus: ' . $status);
 		return ($status == 'creator' || $status == 'administrator');
 	}
