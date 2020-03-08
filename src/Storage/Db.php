@@ -29,8 +29,8 @@ class Db {
 	private function __construct() {
 		try {
 			$this->_connection = new \PDO("mysql:host=$this->_host;dbname=$this->_database", $this->_username, $this->_password);
-			$this->_connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-			$this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+			$this->_connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			Log::debug('Connected to database');
 		} catch (PDOException $e) {
 			Log::error('Error while connecting to database' . $e->getMessage());
