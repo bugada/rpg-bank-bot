@@ -1,5 +1,3 @@
-<?php
-
 namespace RPGBank;
 
 use Monolog\Logger;
