@@ -1,0 +1,65 @@
+
+accountnotfound: |
+  Buongiorno %s,
+  non hai un conto aperto presso di noi. Se vuoi aprirne uno digita:
+  /openaccount
+invalidusername: |
+  Buongiorno %s,
+  hai già un conto aperto ma non è associato al tuo username corrente.
+  Per correggere questa situazione digita /migrateaccount
+balance:
+  description: mostra il saldo del conto
+  success: | 
+    Buongiorno %s,
+    il tuo saldo è: %d
+changebalance:
+  description: aggiunge o toglie fondi al conto indicato (solo admin)
+  wrongformat: Errore nel formato. Per favore usa /changebalance nome,ammontare
+  accountnotfound: |
+    Buongiorno %s,
+    non siamo in grado di trovare il conto di %s
+  success: | 
+    Buongiorno %s,
+    saldo aggiornato di %d per %s.
+    Il nuovo saldo è: %d'
+closeaccount:
+  description: chiude il conto
+  confirm: |
+    Buongiorno %s,
+    chiudendo il tuo conto cancellerai tutti i tuoi dati in nostro possesso. Nessun rimborso è possibile. 
+    Per favore conferma la cancellazione del tuo conto digitando questo comando:
+    /closeaccount %s
+  success: |
+    Buongiorno %s,
+    il tuo conto è stato eliminato con successo
+migrateaccount:
+  description: migra lo username di un conto esistente
+  success: |
+    Buongiorno %s,
+    il tuo conto è stato migrato al tuo username corrente.
+  alreadymigrated: |
+    Buongiorno %s,
+    il tuo conto risulta già migrato
+openaccount:
+  description: apre un un nuovo conto
+  success: | 
+    Benvenuto %s,
+    il tuo conto è stato creato con successo
+  alreadyexisiting: |
+    Buongiorno %s,
+    hai già un conto aperto presso di noi
+start:
+  description: avvia questo bot
+  intro: |
+    Benvenuto in RPG Bank
+
+    Questo bot emula una banca per i giochi di ruolo
+    e può essere utilizzato solo in gruppi pubblici o privati
+
+    Per la lista dei comandi digita /help  
+
+    Quì è disponiibile il codice sorgente del bot 
+    https://github.com/bugada/rpg-bank-bot
+
+help:
+  description: mostra l'elenco di comandi disponibili
