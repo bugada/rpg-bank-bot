@@ -6,8 +6,8 @@ use Telegram\Bot\Objects\User;
 
 class UserService {
 
-	public static function isAdmin($telegramApi, $message) {
-		$status = $telegramApi->getChatMember([
+	public static function isAdmin($api, $message) {
+		$status = $api->getChatMember([
 			'chat_id' => $message->getChat()->getId(), 
 			'user_id' => $message->getFrom()->getId()
 		])->get('status');

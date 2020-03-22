@@ -10,10 +10,10 @@ use RPGBank\Exceptions\CommandException;
 try {
 
 	// Get Telegram Sdk Api instance
-	$telegram = new Api(Conf::BOT_API_TOKEN);
+	$api = new Api(Conf::BOT_API_TOKEN);
 
 	// Waiting for incoming updates
-	$update = $telegram->getWebhookUpdates();
+	$update = $api->getWebhookUpdates();
 
 	// Setup internalization
 	$languageCode = $update->getMessage()->getFrom()->getLanguageCode();
@@ -26,7 +26,7 @@ try {
 	$i18n->init();
 
 	// Adding available commands
-	$telegram->addCommands([
+	$api->addCommands([
 		RPGBank\Commands\StartCommand::class,
 		RPGBank\Commands\HelpCommand::class,
 		RPGBank\Commands\ChangeBalanceCommand::class,
@@ -37,7 +37,7 @@ try {
 	]);
 
 	// Process command
-	$telegram->commandsHandler(true);
+	$api->commandsHandler(true);
 
 } catch (Exception | Error $e) {
 	Log::error($e);
