@@ -1,4 +1,6 @@
 vendor
 composer.phar
+**/logs
 *.log
 *.bak
+**/langcache
