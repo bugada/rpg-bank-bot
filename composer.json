@@ -11,7 +11,8 @@
     }],
     "require": {
         "php": "^7.2",
-        "irazasyed/telegram-bot-sdk": "2.0",
+        "irazasyed/telegram-bot-sdk": "dev-develop",
+        "philipp15b/php-i18n": "4.0.1",
         "monolog/monolog": "^2.0"
     },
     "autoload": {

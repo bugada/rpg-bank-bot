@@ -7,33 +7,33 @@ use RPGBank\Services\AccountService;
 use RPGBank\Exceptions\AccountNotFoundException;
 use RPGBank\Exceptions\InvalidUsernameException;
 
-class BalanceCommand extends \Telegram\Bot\Commands\Command {
+class BalanceCommand extends Command {
 
 	protected $name = 'balance';
 
-	protected $description = 'show the user account balance';
+	protected $description = \L::balance_description;
 
 	public function isForAdmin() {
 		return false;
 	}
 
-	public function handle($arguments) {
+	public function handle() {
+		parent::handle();
 
 		$message = $this->getUpdate()->getMessage();
+		$username = $message->getFrom()->getUsername();
 
 		try {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'we cannot find your account. Please open a new account with: '. PHP_EOL .
-					  '/openaccount';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::accountnotfound, $username)
+			]);
 			return;
 		} catch (InvalidUsernameException $e) {
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'your account is not associated with your current username.'. PHP_EOL .
-					  'Please use the /migrateaccount to fix this.';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::invalidusername, $username)
+			]);
 			return;
 		}
 
@@ -45,8 +45,8 @@ class BalanceCommand extends \Telegram\Bot\Commands\Command {
 
 		$balance = number_format($balance , 0 , "," , ".");
 
-		$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-				  'your current balance is: ' . $balance;
-		$this->replyWithMessage(compact('text'));
+		$this->replyWithMessage([
+			'text' => sprintf(\L::balance_success, $username, $balance)
+		]);
 	}
 }

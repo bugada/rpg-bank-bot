@@ -6,39 +6,39 @@ use RPGBank\Services\AccountService;
 use RPGBank\Exceptions\AccountNotFoundException;
 use RPGBank\Exceptions\InvalidUsernameException;
 
-class MigrateAccountCommand extends \Telegram\Bot\Commands\Command {
+class MigrateAccountCommand extends Command {
 
 	protected $name = 'migrateaccount';
 
-	protected $description = 'migrate an exisiting account';
+	protected $description = \L::migrateaccount_description;
 
 	public function isForAdmin() {
 		return false;
 	}
 
-	public function handle($arguments) {
+	public function handle() {
+		parent::handle();
 
 		$message = $this->getUpdate()->getMessage();
+		$username = $message->getFrom()->getUsername();
 
 		try {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'we cannot find your account. Please open a new account with: '. PHP_EOL .
-					  '/openaccount';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::accountnotfound, $username)
+			]);
 			return;
 		} catch (InvalidUsernameException $e) {
 			AccountService::migrateAccount($message);
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'your account has been succesfully migrated to your current username.';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::migrateaccount_success, $username)
+			]);
 			return;
 		}
 
-		$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-				  'your account is already migrated.';
-		$this->replyWithMessage(compact('text'));
-		return;
+		$this->replyWithMessage([
+			'text' => sprintf(\L::migrateaccount_alreadymigrated, $username)
+		]);
 	}
 }

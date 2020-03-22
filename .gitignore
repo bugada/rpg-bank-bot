@@ -1,6 +1,6 @@
 vendor
 composer.phar
-**/logs
+composer.lock
 *.log
 *.bak
 **/langcache

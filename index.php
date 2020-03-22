@@ -2,13 +2,28 @@
 
 require_once 'vendor/autoload.php';
 
-use RPGBank\Api;
-use RPGBank\Log;
+use \Telegram\Bot\Api;
 use RPGBank\Conf;
+use RPGBank\Log;
+use RPGBank\Exceptions\CommandException;
 
 try {
 
+	// Get Telegram Sdk Api instance
 	$telegram = new Api(Conf::BOT_API_TOKEN);
+
+	// Waiting for incoming updates
+	$update = $telegram->getWebhookUpdates();
+
+	// Setup internalization
+	$languageCode = $update->getMessage()->getFrom()->getLanguageCode();
+	if (Log::isEnabled(Log::DEBUG)) {
+		Log::debug("Language: " . $languageCode);
+	}
+
+	$i18n = new \i18n(__DIR__ . Conf::LANGUAGE_PATH, __DIR__ . Conf::LANGUAGE_CACHE_PATH, Conf::DEFAULT_LANGUAGE);
+	$i18n->setForcedLang($languageCode);
+	$i18n->init();
 
 	// Adding available commands
 	$telegram->addCommands([
@@ -21,17 +36,11 @@ try {
 		RPGBank\Commands\MigrateAccountCommand::class
 	]);
 
-	// Waiting for incoming updates
-	$update = $telegram->getWebhookUpdates();
-	$message = $update->getMessage();
-
-	if ($message && $message->getText()[0] == '/') {
-		Log::debug('Incoming message: ' . $update);
-		$response = $telegram->commandsHandler(true);
-		Log::debug('Command processed:' . $response);
-	}
+	// Process command
+	$telegram->commandsHandler(true);
 
 } catch (Exception | Error $e) {
 	Log::error($e);
 }
+
 ?>

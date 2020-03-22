@@ -7,40 +7,39 @@ use RPGBank\Services\AccountService;
 use RPGBank\Exceptions\AccountNotFoundException;
 use RPGBank\Exceptions\InvalidUsernameException;
 
-class OpenAccountCommand extends \Telegram\Bot\Commands\Command {
+class OpenAccountCommand extends Command {
 
 	protected $name = 'openaccount';
 
-	protected $description = 'open a new account';
+	protected $description = \L::openaccount_description;
 
 	public function isForAdmin() {
 		return false;
 	}
 
-	public function handle($arguments) {
+	public function handle() {
+		parent::handle();
 
 		$message = $this->getUpdate()->getMessage();
+		$username = $message->getFrom()->getUsername();
 
 		try {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
 			AccountService::createAccount($message);
-			$text = 'Welcome on board ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'your account has been opened successfully.';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::openaccount_success, $username)
+			]);
 			return;
 		} catch (InvalidUsernameException $e) {
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'you already have an account but is not associated with your current username.'. PHP_EOL .
-					  'Please use the /migrateaccount to fix this.';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::invalidusername, $username)
+			]);
 			return;
 		}
 
-		$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-				  'you already have an active account.';
-		$this->replyWithMessage(compact('text'));
-		return;
-
+		$this->replyWithMessage([
+			'text' => sprintf(\L::openaccount_alreadyexisiting, $username)
+		]);
 	}
 }

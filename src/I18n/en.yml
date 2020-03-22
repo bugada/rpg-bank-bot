@@ -1,0 +1,67 @@
+
+accountnotfound: |
+  Hello %s,
+  we cannot find your account. Please open a new account with:
+  /openaccount
+invalidusername: |
+  Hello %s,
+  you already have an account but is not associated with your current username.
+  Please use the /migrateaccount to fix this
+balance:
+  description: show the user account balance
+  success: | 
+    Hello %s
+    your current balance is: %d
+changebalance:
+  description: add or remove funds for the given user account (admin only)
+  wrongformat: Wrong format. Usage /changebalance name,amount
+  accountnotfound: |
+    Hello %s,
+    we cannot find the %s account
+  success: | 
+    Hello %s,
+    balance updated by %d for %s.
+    New balance is: %d'
+closeaccount:
+  description: close the account
+  confirm: |
+    Hello %s,
+    closing your account will delete all your data. No refund is possible.
+    Please confirm the deletion of your account with this command:
+    /closeaccount %s
+  success: |
+    Hello %s,
+    your account has been deleted successfully
+migrateaccount:
+  description: migrate an exisiting account
+  success: |
+    Hello %s,
+    your account has been succesfully migrated to your current username
+  alreadymigrated: |
+    Hello %s,
+    your account is already migrated
+openaccount:
+  description: open a new account
+  success: | 
+    Welcome on board %s,
+    your account has been opened successfully
+  alreadyexisiting: |
+    Hello %s,
+    you already have an active account
+start:
+  description: start this bot
+  intro: |
+    Welcome to RPG Bank
+
+    This bot mimics a bank for role play games
+    and can only be used in public or private groups
+    
+    To see available commands type /help
+    
+    You can view the bot source code at
+    https://github.com/bugada/rpg-bank-bot
+
+help:
+  description: get a list of commands
+
+

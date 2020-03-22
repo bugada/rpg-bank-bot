@@ -10,6 +10,11 @@ use Monolog\Processor\WebProcessor;
 
 class Log {
 
+	public const DEBUG = 100;
+   public const INFO = 200;
+   public const WARNING = 300;
+   public const ERROR = 400;
+
 	protected static $instance;
 
 	public static function getLogger() {
@@ -35,6 +40,10 @@ class Log {
 		self::$instance = $logger;
 	}
 
+	public static function isEnabled(int $level) {
+		return self::getLogger()->isHandling($level);
+	}
+
 	public static function debug($message, array $context = []){
 		self::getLogger()->debug($message, $context);
 	}
@@ -43,28 +52,12 @@ class Log {
 		self::getLogger()->info($message, $context);
 	}
 
-	public static function notice($message, array $context = []){
-		self::getLogger()->notice($message, $context);
-	}
-
 	public static function warning($message, array $context = []){
 		self::getLogger()->warning($message, $context);
 	}
 
 	public static function error($message, array $context = []){
 		self::getLogger()->error($message, $context);
-	}
-
-	public static function critical($message, array $context = []){
-		self::getLogger()->critical($message, $context);
-	}
-
-	public static function alert($message, array $context = []){
-		self::getLogger()->alert($message, $context);
-	}
-
-	public static function emergency($message, array $context = []){
-		self::getLogger()->emergency($message, $context);
 	}
 
 }

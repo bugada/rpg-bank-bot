@@ -2,7 +2,7 @@
 
 namespace RPGBank\Services;
 
-use RPGBank\Log;
+use Telegram\Bot\Objects\User;
 
 class UserService {
 
@@ -11,8 +11,6 @@ class UserService {
 			'chat_id' => $message->getChat()->getId(), 
 			'user_id' => $message->getFrom()->getId()
 		])->get('status');
-
-		Log::debug('ChatMemberStatus: ' . $status);
 		return ($status == 'creator' || $status == 'administrator');
 	}
 

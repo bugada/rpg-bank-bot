@@ -5,44 +5,48 @@ namespace RPGBank\Commands;
 use RPGBank\Log;
 use RPGBank\Services\AccountService;
 
-class ChangeBalanceCommand extends \Telegram\Bot\Commands\Command {
+class ChangeBalanceCommand extends Command {
 
 	protected $name = 'changebalance';
 
-	protected $description = 'add or remove funds for the given user account (admin only)';
+	protected $description = \L::changebalance_description;
+
+	protected $pattern = '.+';
 
 	public function isForAdmin() {
 		return true;
 	}
 
-	public function handle($arguments) {
-		Log::debug("ChangeBalanceCommand " . $arguments);
+	public function handle() {
+		parent::handle();
 
-		// Split arguments into username and amount
-		$args = explode(',', $arguments);
+		$args = explode(',', $this->getArguments()['custom']);
+		if (Log::isEnabled(Log::DEBUG)) {
+			Log::debug("ChangeBalanceCommand " . json_encode($args));
+		}
 
 		// Check format
-		if (count($args) != 2 || $args[0] == null || args[0] == "" ||
+		if (count($args) != 2 || $args[0] == null || $args[0] == "" ||
 			$args[1] == null || !preg_match('/^-?\d+$/', $args[1])) {
-			$text = 'Wrong format. Usage /changebalance name,amount';
-			$this->replyWithMessage(compact('text'));
-			return;
+			throw new CommandException(\L::changebalance_wrongformat);
 		}
 
 		$username = $args[0];
 		$amount = intval($args[1]);
 
-		Log::debug("Username: " . $username);
-		Log::debug("Amount: " . $amount);
-
+		if (Log::isEnabled(Log::DEBUG)) {
+			Log::debug("Username: " . $username);
+			Log::debug("Amount: " . $amount);
+		}
+		
 		$message = $this->getUpdate()->getMessage();
 
 		$accountData = AccountService::getAccountByUsername($message, $username);
 
 		if ($accountData === FALSE) {
-			$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-					  'we cannot find the ' . $username . ' account.';
-			$this->replyWithMessage(compact('text'));
+			$this->replyWithMessage([
+				'text' => sprintf(\L::changebalance_accountnotfound, $message->getFrom()->getUsername(), $username)
+			]);
 			return;
 		}
 
@@ -57,9 +61,7 @@ class ChangeBalanceCommand extends \Telegram\Bot\Commands\Command {
 		$balance = number_format($balance , 0 , "," , ".");
 		$amount = number_format($amount , 0 , "," , ".");
 
-		$text = 'Hello ' . $message->getFrom()->getUsername() . ',' . PHP_EOL . 
-				  'balance updated by ' . $amount . ' for ' . $username . '.' . PHP_EOL .
-				  'New balance is: ' .$balance;
+		$text = sprintf(\L::changebalance_success, $message->getFrom()->getUsername(), $amount, $username, $balance);
 		$this->replyWithMessage(compact('text'));
 	}
 }

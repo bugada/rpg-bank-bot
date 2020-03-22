@@ -1,4 +1,4 @@
-# RPGBank
+# RPGBank v2.0
 A Telegram Bot developed using PHP/MySql that mimics basic bank features for role play games and more.
 
 It can only be used in Telegram groups.
@@ -8,7 +8,10 @@ The group admins can change the balance of group members.
 
 This bot stores basic data to do his job: groupid, userid and username
 
-You can see a demo at [@RPGBank](https://t.me/RPGBankBot) in Telegram, add it to a public or private group.
+This version is based on the excellent [Telegram Bot SDK](https://github.com/irazasyed/telegram-bot-sdk) v3.
+
+THIS IS A DEVELOPMENT VERSION, USE IT AT YOUR RISK.
+
 
 ## Commands available
 
@@ -19,6 +22,14 @@ You can see a demo at [@RPGBank](https://t.me/RPGBankBot) in Telegram, add it to
 * `/closeaccount` - close the account
 * `/migrateaccount` - migrate an exisiting account for users that changed their username.
 
+
+## Multilanguage support
+RPGBank Bot now supports localization: it uses the Telegram user settings to identify the language with English as fallback.
+
+You can add your language in the `src\I18n\` folder: add your language following the `en.yml` example (pay attention to use spaces instead of tabs) and include all the properties (currently a missing property causes an error).
+Please share share with me your language file with a pull request.
+
+
 ## How to install
 
 Make sure you have [Composer](https://getcomposer.org/download/) installed on your system. Clone this repository and in the root dir type this command:
@@ -26,6 +37,10 @@ Make sure you have [Composer](https://getcomposer.org/download/) installed on yo
 `composer install`
 
 This will install all the required dependencies in the `vendor` dir.
+
+Since this version is based on the `develop` branch of [Telegram Bot SDK](https://github.com/irazasyed/telegram-bot-sdk) please don't do a
+`composer update` because it can break this bot. The current `composer.lock` has all the dependencies needed.
+
 
 ## How to deploy
 

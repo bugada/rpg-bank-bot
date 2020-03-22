@@ -110,12 +110,16 @@ class AccountService {
 		}
 
 		$username = $sth->fetchColumn();
-		Log::debug("existingAccount::Username: " . $username);
+		if (Log::isEnabled(Log::DEBUG)) {
+			Log::debug('existingAccount::Username: ' . $username);
+		}
+
+		$msgUsername = $message->getFrom()->getUsername();
 
 		if (!$username) {
-			throw new AccountNotFoundException();
-		} else if ($username != $message->getFrom()->getUsername()) {
-			throw new InvalidUsernameException();
+			throw new AccountNotFoundException($msgUsername);
+		} else if ($username != $msgUsername) {
+			throw new InvalidUsernameException($msgUsername);
 		}
 
 		$db = null;
@@ -140,12 +144,13 @@ class AccountService {
 
 		if (!$ok) {
 			Log::error('Error on executing query');
-			// TODO throw exception
-			return;
+			throw new InvalidSqlException();
 		}
 
 		$accountData = $sth->fetch(\PDO::FETCH_ASSOC);
-		Log::debug("getAccountByUsername::AccountData: " . $accountData);
+		if (Log::isEnabled(Log::DEBUG)) {
+			Log::debug('getAccountByUsername::AccountData: ' . $accountData);
+		}
 
 		$db = null;
 
@@ -172,12 +177,13 @@ class AccountService {
 
 		if (!$ok) {
 			Log::error('Error on executing query');
-			// TODO throw exception
-			return;
+			throw new InvalidSqlException();
 		}
 
 		$balance = $sth->fetchColumn();
-		Log::debug("getBalance::Balance: " . $balance);
+		if (Log::isEnabled(Log::DEBUG)) {
+			Log::debug('getBalance::Balance: ' . $balance);
+		}
 
 		$db = null;
 		return $balance;
@@ -201,8 +207,7 @@ class AccountService {
 
 		if (!$ok) {
 			Log::error('Error on executing query');
-			// TODO throw exception
-			return;
+			throw new InvalidSqlException();
 		}
 
 		$db = null;

@@ -33,7 +33,7 @@ closeaccount:
     Buongiorno %s,
     il tuo conto è stato eliminato con successo
 migrateaccount:
-  description: migra lo username di un conto esistente
+  description: migra un account esistente
   success: |
     Buongiorno %s,
     il tuo conto è stato migrato al tuo username corrente.
