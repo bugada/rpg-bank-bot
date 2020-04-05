@@ -23,6 +23,7 @@ try {
 
 	$i18n = new \i18n(__DIR__ . Conf::LANGUAGE_PATH, __DIR__ . Conf::LANGUAGE_CACHE_PATH, Conf::DEFAULT_LANGUAGE);
 	$i18n->setForcedLang($languageCode);
+	$i18n->setMergeFallback(true);
 	$i18n->init();
 
 	// Adding available commands
