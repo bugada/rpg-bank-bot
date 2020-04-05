@@ -11,7 +11,7 @@ balance:
   description: mostra il saldo del conto
   success: | 
     Buongiorno %s,
-    il tuo saldo è: %d
+    il tuo saldo è: %s
 changebalance:
   description: aggiunge o toglie fondi al conto indicato (solo admin)
   wrongformat: Errore nel formato. Per favore usa /changebalance nome,ammontare
@@ -20,8 +20,8 @@ changebalance:
     non siamo in grado di trovare il conto di %s
   success: | 
     Buongiorno %s,
-    saldo aggiornato di %d per %s.
-    Il nuovo saldo è: %d'
+    saldo aggiornato di %s per %s.
+    Il nuovo saldo è: %s
 closeaccount:
   description: chiude il conto
   confirm: |

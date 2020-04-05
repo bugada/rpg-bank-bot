@@ -11,7 +11,7 @@ balance:
   description: show the user account balance
   success: | 
     Hello %s
-    your current balance is: %d
+    your current balance is: %s
 changebalance:
   description: add or remove funds for the given user account (admin only)
   wrongformat: Wrong format. Usage /changebalance name,amount
@@ -20,8 +20,8 @@ changebalance:
     we cannot find the %s account
   success: | 
     Hello %s,
-    balance updated by %d for %s.
-    New balance is: %d'
+    balance updated by %s for %s.
+    New balance is: %s
 closeaccount:
   description: close the account
   confirm: |

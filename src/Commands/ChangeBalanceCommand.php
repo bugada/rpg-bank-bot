@@ -28,7 +28,10 @@ class ChangeBalanceCommand extends Command {
 		// Check format
 		if (count($args) != 2 || $args[0] == null || $args[0] == "" ||
 			$args[1] == null || !preg_match('/^-?\d+$/', $args[1])) {
-			throw new CommandException(\L::changebalance_wrongformat);
+			$this->replyWithMessage([
+				'text' => \L::changebalance_wrongformat
+			]);
+			return;
 		}
 
 		$username = $args[0];
@@ -45,7 +48,7 @@ class ChangeBalanceCommand extends Command {
 
 		if ($accountData === FALSE) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::changebalance_accountnotfound, $message->getFrom()->getUsername(), $username)
+				'text' => \L(changebalance_accountnotfound, [$message->getFrom()->getUsername(), $username])
 			]);
 			return;
 		}
@@ -61,7 +64,7 @@ class ChangeBalanceCommand extends Command {
 		$balance = number_format($balance , 0 , "," , ".");
 		$amount = number_format($amount , 0 , "," , ".");
 
-		$text = sprintf(\L::changebalance_success, $message->getFrom()->getUsername(), $amount, $username, $balance);
+		$text = \L(changebalance_success, [$message->getFrom()->getUsername(), $amount, $username, $balance]);
 		$this->replyWithMessage(compact('text'));
 	}
 }

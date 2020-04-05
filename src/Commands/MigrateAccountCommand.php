@@ -26,19 +26,19 @@ class MigrateAccountCommand extends Command {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::accountnotfound, $username)
+				'text' => \L::accountnotfound($username)
 			]);
 			return;
 		} catch (InvalidUsernameException $e) {
 			AccountService::migrateAccount($message);
 			$this->replyWithMessage([
-				'text' => sprintf(\L::migrateaccount_success, $username)
+				'text' => \L::migrateaccount_success($username)
 			]);
 			return;
 		}
 
 		$this->replyWithMessage([
-			'text' => sprintf(\L::migrateaccount_alreadymigrated, $username)
+			'text' => \L::migrateaccount_alreadymigrated($username)
 		]);
 	}
 }

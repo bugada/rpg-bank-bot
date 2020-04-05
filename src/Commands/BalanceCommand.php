@@ -27,12 +27,12 @@ class BalanceCommand extends Command {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::accountnotfound, $username)
+				'text' => \L::accountnotfound($username)
 			]);
 			return;
 		} catch (InvalidUsernameException $e) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::invalidusername, $username)
+				'text' => \L::invalidusername($username)
 			]);
 			return;
 		}
@@ -46,7 +46,7 @@ class BalanceCommand extends Command {
 		$balance = number_format($balance , 0 , "," , ".");
 
 		$this->replyWithMessage([
-			'text' => sprintf(\L::balance_success, $username, $balance)
+			'text' => \L(balance_success, [$username, $balance])
 		]);
 	}
 }

@@ -29,25 +29,28 @@ class CloseAccountCommand extends Command {
 		try {
 			AccountService::existingAccount($message);
 		} catch (AccountNotFoundException $e) {
-			throw new CommandException(
-				sprintf(\L::accountnotfound, $username)
-			);
+			$this->replyWithMessage([
+				'text' => \L::accountnotfound($username)
+			]);
+			return;
 		} catch (InvalidUsernameException $e) {
-			throw new CommandException(
-				sprintf(\L::invalidusername, $username)
-			);
+			$this->replyWithMessage([
+				'text' => \L::invalidusername($username)
+			]);
+			return;
 		}
 		
 		if ($this->getArguments()['custom'] != $username) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::closeaccount_confirm, $username, $username)
+				'text' => \L(closeaccount_confirm, [$username, $username])
 			]);
+			return;
 		}
 
 		AccountService::deleteAccount($message);
 
 		$this->replyWithMessage([
-			'text' => sprintf(\L::closeaccount_success, $username)
+			'text' => \L::closeaccount_success($username)
 		]);
 	}
 }

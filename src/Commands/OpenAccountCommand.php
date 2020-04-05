@@ -28,18 +28,18 @@ class OpenAccountCommand extends Command {
 		} catch (AccountNotFoundException $e) {
 			AccountService::createAccount($message);
 			$this->replyWithMessage([
-				'text' => sprintf(\L::openaccount_success, $username)
+				'text' => \L::openaccount_success($username)
 			]);
 			return;
 		} catch (InvalidUsernameException $e) {
 			$this->replyWithMessage([
-				'text' => sprintf(\L::invalidusername, $username)
+				'text' => \L::invalidusername($username)
 			]);
 			return;
 		}
 
 		$this->replyWithMessage([
-			'text' => sprintf(\L::openaccount_alreadyexisiting, $username)
+			'text' => \L::openaccount_alreadyexisiting($username)
 		]);
 	}
 }
