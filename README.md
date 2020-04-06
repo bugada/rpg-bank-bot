@@ -24,9 +24,9 @@ THIS IS A DEVELOPMENT VERSION, USE IT AT YOUR RISK.
 
 
 ## Multilanguage support
-RPGBank Bot now supports localization: it uses the Telegram user settings to identify the language with English as fallback.
+RPGBank Bot now supports localization: it uses the Telegram user settings to identify the language with the default language as fallback.
 
-You can add your language in the `src\I18n\` folder: add your language following the `en.yml` example (pay attention to use spaces instead of tabs) and include all the properties (currently a missing property causes an error).
+You can add your language in the `src\I18n\` folder: follow the `en.yml` example (pay attention to use spaces instead of tabs); missing properties will fallback to the configured default language (see `src/Conf.php`) or will raise an error if unknown.
 Please share share with me your language file with a pull request.
 
 
